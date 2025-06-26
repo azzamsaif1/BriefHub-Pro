@@ -1,0 +1,1113 @@
+/* تنسيقات عامة */
+:root {
+    --primary: #4361ee;
+    --secondary: #3f37c9;
+    --success: #4cc9f0;
+    --warning: #f72585;
+    --danger: #e63946;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --light-gray: #e9ecef;
+    --sidebar-width: 250px;
+    --header-height: 70px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Tajawal', sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    direction: rtl;
+    overflow-x: hidden;
+}
+
+/* رأس التطبيق */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    height: var(--header-height);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.5rem;
+}
+
+.logo i {
+    font-size: 28px;
+    color: #ffd166;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.notification-bell {
+    position: relative;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+}
+
+.notification-bell:hover {
+    transform: scale(1.1);
+}
+
+.notification-count {
+    position: absolute;
+    top: -8px;
+    left: -10px;
+    background-color: var(--danger);
+    color: white;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    transition: background 0.3s;
+}
+
+.user-profile:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.user-profile i {
+    font-size: 1.5rem;
+}
+
+/* الشريط الجانبي */
+.container {
+    display: flex;
+    min-height: 100vh;
+    padding-top: var(--header-height);
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    background: white;
+    color: var(--dark);
+    box-shadow: 3px 0 10px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem 0;
+    transition: all 0.3s ease;
+    position: fixed;
+    top: var(--header-height);
+    bottom: 0;
+    right: 0;
+    overflow-y: auto;
+    z-index: 900;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.toggle-sidebar {
+    text-align: left;
+    padding: 0 1.5rem;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    color: var(--gray);
+    font-size: 1.2rem;
+}
+
+.toggle-sidebar i {
+    transition: transform 0.3s;
+}
+
+.sidebar.collapsed .toggle-sidebar i {
+    transform: rotate(180deg);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.8rem;
+    color: var(--dark);
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+    background: rgba(67, 97, 238, 0.05);
+    color: var(--primary);
+    border-left-color: var(--primary);
+}
+
+.nav-item.active {
+    background: rgba(67, 97, 238, 0.1);
+    color: var(--primary);
+    border-left-color: var(--primary);
+    font-weight: 500;
+}
+
+.nav-item i {
+    font-size: 1.2rem;
+    width: 30px;
+    transition: color 0.3s;
+}
+
+.nav-text {
+    transition: opacity 0.3s;
+    font-size: 1rem;
+}
+
+.sidebar.collapsed .nav-text {
+    opacity: 0;
+    width: 0;
+}
+
+.sidebar.collapsed .notification-count {
+    opacity: 0;
+}
+
+.notification-count {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    background-color: var(--danger);
+    color: white;
+    border-radius: 50%;
+    min-width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* المحتوى الرئيسي */
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    margin-right: var(--sidebar-width);
+    transition: margin 0.3s;
+}
+
+.sidebar.collapsed + .main-content {
+    margin-right: 70px;
+}
+
+/* البطاقات */
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    padding: 1.8rem;
+    margin-bottom: 1.8rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.card-icon {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+/* منطقة المسح الضوئي */
+.scanner-container {
+    text-align: center;
+    padding: 2rem;
+}
+
+.scanner-box {
+    border: 2px dashed var(--primary);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 1.5rem;
+    background: rgba(67, 97, 238, 0.03);
+}
+
+.scanner-box:hover {
+    background: rgba(67, 97, 238, 0.08);
+    border-color: var(--secondary);
+}
+
+.scanner-box i {
+    font-size: 3.5rem;
+    color: var(--primary);
+    margin-bottom: 1.2rem;
+    opacity: 0.7;
+}
+
+.scanner-box p {
+    font-size: 1.1rem;
+    color: var(--gray);
+}
+
+.scanner-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* الأزرار */
+.btn {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline:hover {
+    background: rgba(67, 97, 238, 0.1);
+}
+
+.btn-small {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* لوحة التنبيهات */
+.notification-panel {
+    position: fixed;
+    top: 0;
+    left: -400px;
+    width: 380px;
+    height: 100vh;
+    background: white;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+    z-index: 1100;
+    transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    padding: 1.2rem;
+    overflow-y: auto;
+}
+
+.notification-panel.open {
+    left: 0;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.notification-header h3 {
+    font-size: 1.4rem;
+    color: var(--dark);
+}
+
+/* تفاصيل المستند */
+.document-details {
+    padding: 1.5rem;
+}
+
+.document-details .document-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.document-priority {
+    color: white;
+    padding: 0.4rem 1.2rem;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.document-priority.عاجل {
+    background: var(--danger);
+}
+
+.document-priority.متوسط {
+    background: var(--warning);
+}
+
+.document-priority.منخفض {
+    background: var(--success);
+}
+
+.document-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.info-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid var(--primary);
+}
+
+.info-card h4 {
+    color: var(--gray);
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+}
+
+.info-card p {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--dark);
+}
+
+.status-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.status-actions {
+    display: flex;
+    gap: 10px;
+}
+
+#statusSelect {
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--light-gray);
+    flex: 1;
+}
+
+.document-preview {
+    background: white;
+    padding: 1.8rem;
+    border-radius: 12px;
+    min-height: 500px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* قائمة المستندات */
+.inbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.8rem;
+}
+
+.document-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.document-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.document-card-header {
+    padding: 1.2rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.document-card-body {
+    padding: 1.5rem;
+}
+
+.document-card h3 {
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.document-card p {
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+    color: var(--gray);
+    display: flex;
+}
+
+.document-card p strong {
+    min-width: 80px;
+    display: inline-block;
+}
+
+.priority {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.priority.عاجل {
+    background: var(--danger);
+}
+
+.priority.متوسط {
+    background: var(--warning);
+}
+
+.priority.منخفض {
+    background: var(--success);
+}
+
+/* فلتر صندوق الوارد */
+.inbox-filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1.8rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 30px;
+    background: var(--light-gray);
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+}
+
+/* التنبيهات */
+.notifications-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notification-item {
+    padding: 1.2rem;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 15px;
+    animation: slideIn 0.3s ease;
+    border-left: 4px solid var(--primary);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.notification-item i {
+    font-size: 1.4rem;
+    color: var(--primary);
+    margin-top: 3px;
+}
+
+.notification-content h4 {
+    margin-bottom: 0.4rem;
+    font-size: 1.05rem;
+    color: var(--dark);
+}
+
+.notification-content p {
+    color: var(--gray);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.notification-content .timestamp {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-top: 0.5rem;
+    opacity: 0.7;
+}
+
+/* لوحة القيادة */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.8rem;
+    margin-bottom: 2.5rem;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.8rem 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-card i {
+    font-size: 2.8rem;
+    margin-bottom: 1.2rem;
+    color: var(--primary);
+    opacity: 0.8;
+}
+
+.dashboard-card h3 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+    font-weight: 700;
+}
+
+.dashboard-card p {
+    color: var(--gray);
+    font-size: 1.05rem;
+}
+
+/* شريط التقدم */
+.progress-container {
+    margin: 1.5rem 0;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--gray);
+}
+
+.progress-bar {
+    height: 10px;
+    background: var(--light-gray);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+
+/* بطاقات المعالجة */
+.processing-card {
+    background: white;
+    padding: 1.2rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-left: 4px solid var(--primary);
+}
+
+.processing-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+}
+
+.processing-name {
+    font-weight: 500;
+}
+
+.processing-status {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+/* تأثيرات متحركة */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* تصميم متجاوب */
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(100%);
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-right: 0;
+    }
+    
+    .sidebar.collapsed + .main-content {
+        margin-right: 0;
+    }
+    
+    .toggle-sidebar {
+        display: none;
+    }
+}
+/* تنسيقات صندوق الوارد */
+.inbox-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.inbox-tools {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 30px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.search-box input {
+  border: none;
+  padding: 0.5rem;
+  width: 250px;
+  outline: none;
+  background: transparent;
+}
+
+.sort-filter {
+  display: flex;
+  gap: 10px;
+}
+
+.sort-filter select {
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--light-gray);
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+}
+
+.inbox-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: white;
+  padding: 1.2rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  min-width: 200px;
+}
+
+.stat-card i {
+  font-size: 1.8rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.stat-card i.fa-inbox {
+  background: var(--primary);
+}
+
+.stat-card.urgent i {
+  background: var(--danger);
+}
+
+.stat-card.pending i {
+  background: var(--warning);
+}
+
+.inbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.inbox-item {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+  transition: transform 0.3s;
+  border-left: 4px solid var(--primary);
+}
+
+.inbox-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.inbox-item.urgent {
+  border-left-color: var(--danger);
+}
+
+.inbox-item-header {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(67, 97, 238, 0.03);
+}
+
+.inbox-item-header h3 {
+  font-size: 1.1rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.inbox-item-type {
+  background: var(--primary);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.inbox-item-body {
+  padding: 1.2rem 1.5rem;
+}
+
+.inbox-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.inbox-item-info p {
+  display: flex;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.inbox-item-info strong {
+  min-width: 80px;
+  display: inline-block;
+  color: var(--gray);
+}
+
+.inbox-item-actions {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--light-gray);
+  padding-top: 1rem;
+}
+
+.inbox-item-date {
+  font-size: 0.85rem;
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.inbox-item-preview {
+  color: var(--primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+/* تحسينات لواجهة الكاميرا */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.camera-container {
+    width: 100%;
+    height: 400px;
+    background-color: #000;
+    margin: 15px 0;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.camera-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.camera-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#imagePreview img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#ocrResult {
+    margin-top: 20px;
+}
+
+#extractedTextFromImage {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 16px;
+}
+
+.camera-help {
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.instructions {
+    background-color: #f8f9fa;
+    border-left: 4px solid #4caf50;
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+}
+
+.instructions h4 {
+    margin-top: 0;
+    color: #4caf50;
+}
+
+.instructions ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+#processImageBtn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+#cameraModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        z-index: 1000;
+        display: none;
+    }
+    
+.modal-content {
+        background: white;
+        margin: 5% auto;
+        padding: 20px;
+        width: 80%;
+        max-width: 700px;
+        border-radius: 10px;
+    }
+    
+.close-modal {
+        float: left;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+video {
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    
+      .chart-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      
+      .chart {
+        flex: 1;
+        min-width: 300px;
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+      
+      .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      
+      .chart-content {
+        height: 250px;
+        display: flex;
+        align-items: flex-end;
+        gap: 0.5rem;
+      }
+      
+      .chart-bar {
+        flex: 1;
+        background: linear-gradient(to top, var(--primary) 0%, var(--secondary) 100%);
+        border-radius: 8px 8px 0 0;
+        position: relative;
+      }
+      
+      .chart-label {
+        position: absolute;
+        bottom: -25px;
+        width: 100%;
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--gray);
+      }
+      
+      .chart-value {
+        position: absolute;
+        top: -25px;
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+      }
+    

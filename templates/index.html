@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>BriefHub Pro - Smart Inbox Management</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Application Header -->
+    <header class="header">
+      <div class="logo">
+        <i class="fas fa-mail-bulk"></i>
+        <h1>BriefHub Pro</h1>
+      </div>
+
+      <div class="user-actions">
+        <div class="notification-bell" id="notificationBell">
+          <i class="fas fa-bell"></i>
+          <span class="notification-count" id="notificationCount">0</span>
+        </div>
+        <div class="user-profile">
+          <i class="fas fa-user-circle"></i>
+          <span>System Admin</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Sidebar -->
+      <nav class="sidebar" id="sidebar">
+        <div class="toggle-sidebar" id="toggleSidebar">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+
+        <a href="#" class="nav-item active" data-section="dashboard">
+          <i class="fas fa-home"></i>
+          <span class="nav-text">Dashboard</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="inbox">
+          <i class="fas fa-inbox"></i>
+          <span class="nav-text">Inbox</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="urgent">
+          <i class="fas fa-bolt"></i>
+          <span class="nav-text">Urgent Tasks</span>
+          <span class="notification-count" id="urgentCount">0</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="scanner">
+          <i class="fas fa-scanner"></i>
+          <span class="nav-text">Smart Scan</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="archive">
+          <i class="fas fa-file-alt"></i>
+          <span class="nav-text">Archive</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="reports">
+          <i class="fas fa-chart-line"></i>
+          <span class="nav-text">Reports</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="settings">
+          <i class="fas fa-cog"></i>
+          <span class="nav-text">Settings</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="integrations">
+          <i class="fas fa-plug"></i>
+          <span class="nav-text">Integrations</span>
+        </a>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content" id="mainContent">
+        <!-- Dynamic content will load here -->
+      </main>
+    </div>
+
+    <!-- Notifications Panel -->
+    <div class="notification-panel" id="notificationPanel">
+      <div class="notification-header">
+        <h3>Notifications (<span id="notificationTotal">0</span>)</h3>
+        <button id="closeNotifications" class="btn btn-outline">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="notificationsContainer" class="notifications-container"></div>
+    </div>
+
+    <!-- Camera Window -->
+    <div id="cameraModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Camera Scan</h2>
+
+        <div class="instructions">
+          <h4>Usage Instructions:</h4>
+          <ul>
+            <li>Hold the device steady and parallel to the document</li>
+            <li>Ensure adequate lighting in the area</li>
+            <li>Fill the camera frame with the document as much as possible</li>
+            <li>Avoid shadows on the document</li>
+          </ul>
+        </div>
+
+        <div class="camera-container">
+          <video id="cameraFeed" autoplay playsinline></video>
+          <canvas id="cameraCanvas" style="display: none"></canvas>
+        </div>
+
+        <p class="camera-help">
+          Press "Capture Image" to take a picture of the document
+        </p>
+
+        <div class="camera-actions">
+          <button id="captureBtn" class="btn btn-primary">
+            <i class="fas fa-camera"></i> Capture Image
+          </button>
+          <button id="retryBtn" class="btn btn-outline" style="display: none">
+            <i class="fas fa-redo"></i> Retry
+          </button>
+          <button
+            id="processImageBtn"
+            class="btn btn-primary"
+            style="display: none"
+          >
+            <i class="fas fa-search"></i> Analyze Image
+          </button>
+        </div>
+
+        <div
+          id="imagePreview"
+          style="display: none; margin-top: 20px; text-align: center"
+        ></div>
+
+        <div id="ocrResult" style="display: none; margin-top: 20px">
+          <h3>Extracted Text</h3>
+          <textarea
+            id="extractedTextFromImage"
+            rows="10"
+            style="width: 100%; margin-top: 10px"
+          ></textarea>
+          <button
+            id="useTextBtn"
+            class="btn btn-primary"
+            style="margin-top: 10px; display: none"
+          >
+            <i class="fas fa-check"></i> Use Text
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTML Templates for Dynamic Use -->
+    <template id="dashboardTemplate">
+      <h2 style="margin-bottom: 1.5rem">Dashboard</h2>
+
+      <div class="dashboard-grid">
+        <div class="dashboard-card">
+          <i class="fas fa-file-alt"></i>
+          <h3 id="totalDocuments">0</h3>
+          <p>Total Documents</p>
+        </div>
+
+        <div class="dashboard-card">
+          <i class="fas fa-clock"></i>
+          <h3 id="pendingDocuments">0</h3>
+          <p>Pending Review</p>
+        </div>
+
+        <div class="dashboard-card">
+          <i class="fas fa-bolt"></i>
+          <h3 id="urgentDocuments">0</h3>
+          <p>Urgent Documents</p>
+        </div>
+
+        <div class="dashboard-card">
+          <i class="fas fa-check-circle"></i>
+          <h3 id="completedDocuments">0</h3>
+          <p>Completed Documents</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+          "
+        >
+          <h3>Inbox</h3>
+          <button class="btn btn-primary" id="addDocumentBtn">
+            <i class="fas fa-plus"></i> Add Document
+          </button>
+        </div>
+
+        <div class="inbox-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="urgent">Urgent</button>
+          <button class="filter-btn" data-filter="bills">Bills</button>
+          <button class="filter-btn" data-filter="violations">
+            Violations
+          </button>
+          <button class="filter-btn" data-filter="contracts">Contracts</button>
+        </div>
+
+        <div class="inbox-grid" id="inboxGrid">
+          <!-- Will be populated by script -->
+        </div>
+      </div>
+    </template>
+
+    <template id="scannerTemplate">
+      <h2 style="margin-bottom: 1.5rem">Smart Scanner</h2>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Scan New Document</h3>
+          <div class="card-icon">
+            <i class="fas fa-camera"></i>
+          </div>
+        </div>
+        <div class="scanner-container">
+          <div class="scanner-box" id="scannerBox">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Click to upload image or drag here</p>
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/*,application/pdf"
+              style="display: none"
+            />
+          </div>
+          <div class="scanner-actions">
+            <button class="btn btn-outline" id="cameraScanBtn">
+              <i class="fas fa-camera"></i> Scan with Camera
+            </button>
+            <button class="btn btn-primary" id="processDocumentBtn" disabled>
+              <i class="fas fa-search"></i> Analyze Document
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Extracted Text Preview Section -->
+      <div
+        class="card"
+        style="margin-top: 2rem; display: none"
+        id="textPreviewCard"
+      >
+        <div class="card-header">
+          <h3 class="card-title">Extracted Text</h3>
+          <div class="card-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+        </div>
+        <div
+          id="extractedTextPreview"
+          style="
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow: auto;
+          "
+        >
+          <pre
+            id="extractedText"
+            style="white-space: pre-wrap; font-family: 'Tajawal', sans-serif"
+          ></pre>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 2rem">
+        <div class="card-header">
+          <h3 class="card-title">Processing Documents</h3>
+          <div class="card-icon">
+            <i class="fas fa-hourglass-half"></i>
+          </div>
+        </div>
+        <div id="processingDocuments">
+          <!-- Will be populated by script -->
+        </div>
+      </div>
+    </template>
+
+    <template id="documentDetailsTemplate">
+      <div class="document-details">
+        <button class="btn btn-outline" id="backToInbox">
+          <i class="fas fa-arrow-left"></i> Back to Inbox
+        </button>
+
+        <div class="document-header">
+          <h2 id="documentTitle"></h2>
+          <span class="document-priority" id="documentPriority"></span>
+        </div>
+
+        <div class="document-info-grid">
+          <div class="info-card">
+            <h4>Document Type</h4>
+            <p id="documentType"></p>
+          </div>
+
+          <div class="info-card">
+            <h4>Sender</h4>
+            <p id="documentSender"></p>
+          </div>
+
+          <div class="info-card">
+            <h4>Received Date</h4>
+            <p id="documentReceived"></p>
+          </div>
+
+          <div class="info-card">
+            <h4>Due Date</h4>
+            <p id="documentDue"></p>
+          </div>
+
+          <div class="info-card">
+            <h4>Current Status</h4>
+            <div class="status-container">
+              <span id="documentStatus"></span>
+              <div class="status-actions">
+                <select id="statusSelect">
+                  <option value="New">New</option>
+                  <option value="Pending Review">Pending Review</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+                <button class="btn btn-small" id="updateStatusBtn">
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <h4>Assignee</h4>
+            <p id="documentAssignee"></p>
+          </div>
+        </div>
+
+        <div class="document-preview">
+          <h3>Document Preview</h3>
+          <div id="documentPreview">
+            <p>Loading document preview...</p>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="inboxTemplate">
+      <div class="inbox-header">
+        <h2>Inbox</h2>
+
+        <div class="inbox-tools">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              id="searchDocuments"
+              placeholder="Search documents..."
+            />
+          </div>
+
+          <div class="sort-filter">
+            <select id="sortBy">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="priority">By Priority</option>
+            </select>
+
+            <select id="filterBy">
+              <option value="all">All Documents</option>
+              <option value="urgent">Urgent Only</option>
+              <option value="invoices">Invoices</option>
+              <option value="contracts">Contracts</option>
+              <option value="violations">Violations</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="inbox-stats">
+        <div class="stat-card">
+          <i class="fas fa-inbox"></i>
+          <div>
+            <h3 id="totalInbox">0</h3>
+            <p>Documents</p>
+          </div>
+        </div>
+
+        <div class="stat-card urgent">
+          <i class="fas fa-bolt"></i>
+          <div>
+            <h3 id="urgentInbox">0</h3>
+            <p>Urgent</p>
+          </div>
+        </div>
+
+        <div class="stat-card pending">
+          <i class="fas fa-clock"></i>
+          <div>
+            <h3 id="pendingInbox">0</h3>
+            <p>Pending Review</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="inbox-grid" id="inboxGrid">
+        <!-- Will be populated by script -->
+      </div>
+    </template>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>
